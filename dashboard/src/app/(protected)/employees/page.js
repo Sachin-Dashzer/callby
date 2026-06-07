@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
-import api from '@/lib/api';
+import api from '../../../lib/api';
 
 export default function EmployeesPage() {
   const [employees, setEmployees] = useState([]);

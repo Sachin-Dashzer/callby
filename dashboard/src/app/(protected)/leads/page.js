@@ -1,9 +1,9 @@
 'use client';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import api from '@/lib/api';
-import LeadStatusBadge from '@/components/LeadStatusBadge';
-import Pagination from '@/components/Pagination';
+import api from '../../../lib/api';
+import LeadStatusBadge from '../../../components/LeadStatusBadge';
+import Pagination from '../../../components/Pagination';
 
 const STATUSES = ['new', 'contacted', 'interested', 'not_interested', 'converted', 'lost'];
 

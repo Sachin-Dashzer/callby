@@ -2,8 +2,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
-import api from '@/lib/api';
-import { setToken } from '@/lib/auth';
+import api from '../../lib/api';
+import { setToken } from '../../lib/auth';
 
 export default function LoginPage() {
   const router = useRouter();

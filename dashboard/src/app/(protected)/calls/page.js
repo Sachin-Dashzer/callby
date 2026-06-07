@@ -1,8 +1,8 @@
 'use client';
 import { useEffect, useState } from 'react';
-import api from '@/lib/api';
-import CallTypeBadge from '@/components/CallTypeBadge';
-import Pagination from '@/components/Pagination';
+import api from '../../../lib/api';
+import CallTypeBadge from '../../../components/CallTypeBadge';
+import Pagination from '../../../components/Pagination';
 
 function formatDuration(sec) {
   if (!sec) return '0s';

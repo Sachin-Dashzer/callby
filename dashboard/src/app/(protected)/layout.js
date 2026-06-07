@@ -1,9 +1,9 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Sidebar from '@/components/Sidebar';
-import TopBar from '@/components/TopBar';
-import { isAuthenticated } from '@/lib/auth';
+import Sidebar from '../../components/Sidebar';
+import TopBar from '../../components/TopBar';
+import { isAuthenticated } from '../../lib/auth';
 
 export default function ProtectedLayout({ children }) {
   const router = useRouter();

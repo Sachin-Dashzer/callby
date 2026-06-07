@@ -1,10 +1,10 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
-import api from '@/lib/api';
-import CallTypeBadge from '@/components/CallTypeBadge';
-import Pagination from '@/components/Pagination';
-import StatCard from '@/components/StatCard';
+import api from '../../../../lib/api';
+import CallTypeBadge from '../../../../components/CallTypeBadge';
+import Pagination from '../../../../components/Pagination';
+import StatCard from '../../../../components/StatCard';
 
 function formatDuration(sec) {
   if (!sec) return '0s';

@@ -2,9 +2,9 @@
 import { useEffect, useState, useRef } from 'react';
 import Pusher from 'pusher-js';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
-import api from '@/lib/api';
-import StatCard from '@/components/StatCard';
-import CallTypeBadge from '@/components/CallTypeBadge';
+import api from '../../../lib/api';
+import StatCard from '../../../components/StatCard';
+import CallTypeBadge from '../../../components/CallTypeBadge';
 
 function formatDuration(sec) {
   if (!sec) return '0s';

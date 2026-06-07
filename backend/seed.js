@@ -5,6 +5,9 @@ const User = require('./models/User');
 const CallLog = require('./models/CallLog');
 const Lead = require('./models/Lead');
 
+process.env.MONGO_URI = 'mongodb://clinicryanofficial_db_user:dashzer1503@ac-snwnffv-shard-00-00.b0wrbjy.mongodb.net:27017,ac-snwnffv-shard-00-01.b0wrbjy.mongodb.net:27017,ac-snwnffv-shard-00-02.b0wrbjy.mongodb.net:27017/?ssl=true&replicaSet=atlas-4x5es1-shard-0&authSource=admin&appName=Cluster0';
+
+
 const CALL_TYPES = ['incoming', 'outgoing', 'missed', 'rejected'];
 const CONTACT_NAMES = ['Raj Kumar', 'Priya Singh', 'Amit Sharma', 'Neha Patel', 'Vikram Joshi', 'Anita Verma', 'Suresh Reddy', 'Kavita Nair', 'Ravi Gupta', 'Sunita Rao'];
 const LEAD_SOURCES = ['website', 'referral', 'cold_call', 'social_media', 'email_campaign'];

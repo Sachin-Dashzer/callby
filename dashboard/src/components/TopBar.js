@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
-import api from '@/lib/api';
+import api from '../lib/api';
 
 export default function TopBar() {
   const router = useRouter();
