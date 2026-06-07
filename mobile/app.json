@@ -1,0 +1,37 @@
+{
+  "expo": {
+    "name": "CallTrack",
+    "slug": "calltrack-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "android": {
+      "package": "com.calltrack.app",
+      "permissions": [
+        "READ_CALL_LOG",
+        "READ_CONTACTS",
+        "RECEIVE_BOOT_COMPLETED",
+        "FOREGROUND_SERVICE"
+      ]
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.calltrack.app"
+    },
+    "extra": {
+      "apiUrl": "https://YOUR_BACKEND_URL_HERE"
+    },
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "compileSdkVersion": 34,
+            "targetSdkVersion": 34,
+            "buildToolsVersion": "34.0.0"
+          }
+        }
+      ]
+    ]
+  }
+}
