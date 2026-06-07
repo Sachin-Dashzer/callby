@@ -1,12 +1,10 @@
 'use client';
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import api from '../../lib/api';
 import { setToken } from '../../lib/auth';
 
 export default function LoginPage() {
-  const router = useRouter();
   const [form, setForm] = useState({ email: '', password: '' });
   const [loading, setLoading] = useState(false);
 
@@ -17,7 +15,7 @@ export default function LoginPage() {
       const res = await api.post('/api/auth/login', form);
       setToken(res.data.data.token);
       toast.success('Login successful');
-      router.push('/dashboard');
+      window.location.href = '/dashboard';
     } catch (err) {
       toast.error(err.response?.data?.error || 'Login failed');
     } finally {
