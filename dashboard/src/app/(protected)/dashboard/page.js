@@ -29,9 +29,11 @@ export default function DashboardPage() {
     fetchStats();
     const interval = setInterval(fetchStats, 30000);
 
-    // Pusher real-time subscription
+    // Pusher real-time subscription (only if key is configured)
+    if (!process.env.NEXT_PUBLIC_PUSHER_KEY) return () => clearInterval(interval);
+
     const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY, {
-      cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER
+      cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER || 'ap2'
     });
     const channel = pusher.subscribe('managers');
     channelRef.current = channel;

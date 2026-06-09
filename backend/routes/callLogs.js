@@ -124,8 +124,13 @@ router.get('/realtime', protect, isManager, async (req, res) => {
   }
 });
 
-// GET /api/calls/employee/:id — calls of specific employee (manager)
-router.get('/employee/:id', protect, isManager, async (req, res) => {
+// GET /api/calls/employee/:id — manager can view any employee; employee can only view their own
+router.get('/employee/:id', protect, async (req, res) => {
+  const isManager = req.user.role === 'manager';
+  const isSelf = req.user._id.toString() === req.params.id;
+  if (!isManager && !isSelf) {
+    return res.status(403).json({ success: false, error: 'Access denied' });
+  }
   try {
     const { callType, startDate, endDate, page = 1, limit = 20 } = req.query;
     const filter = { employeeId: req.params.id };
