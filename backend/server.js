@@ -45,9 +45,13 @@ app.use('/api/auth/register', authLimiter);
 let isConnected = false;
 app.use(async (_req, _res, next) => {
   if (isConnected) return next();
-  await mongoose.connect(process.env.MONGO_URI);
-  isConnected = true;
-  next();
+  try {
+    await mongoose.connect(process.env.MONGO_URI);
+    isConnected = true;
+    next();
+  } catch (err) {
+    next(err);
+  }
 });
 
 // routes

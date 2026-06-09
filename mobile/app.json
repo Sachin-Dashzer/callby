@@ -9,9 +9,7 @@
       "package": "com.calltrack.app",
       "permissions": [
         "READ_CALL_LOG",
-        "READ_CONTACTS",
-        "RECEIVE_BOOT_COMPLETED",
-        "FOREGROUND_SERVICE"
+        "READ_CONTACTS"
       ]
     },
     "ios": {
@@ -19,19 +17,10 @@
       "bundleIdentifier": "com.calltrack.app"
     },
     "extra": {
-      "apiUrl": "https://YOUR_BACKEND_URL_HERE"
-    },
-    "plugins": [
-      [
-        "expo-build-properties",
-        {
-          "android": {
-            "compileSdkVersion": 34,
-            "targetSdkVersion": 34,
-            "buildToolsVersion": "34.0.0"
-          }
-        }
-      ]
-    ]
+      "apiUrl": "https://callby.vercel.app",
+      "eas": {
+        "projectId": "68f8375c-ebdb-4abc-ad8b-a241ef7d9f17"
+      }
+    }
   }
 }

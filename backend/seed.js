@@ -1,6 +1,5 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
 const User = require('./models/User');
 const CallLog = require('./models/CallLog');
 const Lead = require('./models/Lead');
@@ -41,11 +40,10 @@ async function seed() {
   console.log('Cleared existing data');
 
   // create manager
-  const managerPassword = await bcrypt.hash('password123', 10);
   const manager = await User.create({
     name: 'Admin Manager',
     email: 'manager@calltrack.com',
-    password: managerPassword,
+    password: 'password123',
     role: 'manager',
     phone: randomPhone(),
     isActive: true
@@ -55,11 +53,10 @@ async function seed() {
   // create 5 employees
   const employees = [];
   for (let i = 1; i <= 5; i++) {
-    const empPassword = await bcrypt.hash('password123', 10);
     const emp = await User.create({
       name: `Employee ${i}`,
       email: `employee${i}@calltrack.com`,
-      password: empPassword,
+      password: 'password123',
       role: 'employee',
       phone: randomPhone(),
       deviceId: `device_${i}_${Date.now()}`,

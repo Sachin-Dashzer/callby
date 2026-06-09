@@ -1,65 +1,43 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Platform, PermissionsAndroid } from 'react-native';
+import { Platform } from 'react-native';
 import api from '../lib/api';
 
 const LAST_SYNC_KEY = 'last_sync_timestamp';
 
-// Map Android call type integers to our schema strings
-const ANDROID_TYPE_MAP = {
-  1: 'incoming',
-  2: 'outgoing',
-  3: 'missed',
-  5: 'rejected'
-};
+// ------------------------------------------------------------------
+// NOTE: Real Android call log reading requires a custom Expo native
+// module (react-native-call-log is incompatible with RN 0.73+).
+// For now, sync sends the last 10 calls stored locally by the app.
+// To upgrade: build a custom expo-module using Android ContentResolver
+// and replace readLocalCallLogs() below.
+// ------------------------------------------------------------------
 
-async function requestCallLogPermission() {
-  if (Platform.OS !== 'android') return false;
-  const granted = await PermissionsAndroid.request(
-    PermissionsAndroid.PERMISSIONS.READ_CALL_LOG,
-    {
-      title: 'Call Log Permission',
-      message: 'CallTrack needs access to your call log to sync calls with your manager.',
-      buttonPositive: 'Allow',
-      buttonNegative: 'Deny'
-    }
-  );
-  return granted === PermissionsAndroid.RESULTS.GRANTED;
+async function readLocalCallLogs(sinceTimestamp) {
+  try {
+    const raw = await AsyncStorage.getItem('local_call_logs');
+    const all = raw ? JSON.parse(raw) : [];
+    return all.filter((c) => new Date(c.timestamp).getTime() > sinceTimestamp);
+  } catch {
+    return [];
+  }
 }
 
-async function readDeviceCallLogs(sinceTimestamp) {
-  if (Platform.OS !== 'android') return [];
-
-  const hasPermission = await requestCallLogPermission();
-  if (!hasPermission) throw new Error('Call log permission denied');
-
-  // react-native-call-log requires EAS bare build — it won't work in Expo Go
-  const CallLogs = require('react-native-call-log').default;
-  const rawLogs = await CallLogs.load(200); // fetch last 200 entries
-
-  const newLogs = [];
-  for (const log of rawLogs) {
-    const ts = parseInt(log.timestamp, 10);
-    if (ts <= sinceTimestamp) continue; // already synced
-
-    const callType = ANDROID_TYPE_MAP[parseInt(log.type, 10)];
-    if (!callType) continue; // skip unknown types
-
-    newLogs.push({
-      callType,
-      contactNumber: log.phoneNumber || 'Unknown',
-      contactName: log.name || 'Unknown',
-      duration: parseInt(log.duration, 10) || 0,
-      timestamp: new Date(ts).toISOString()
-    });
-  }
-  return newLogs;
+// Called from the app when a call ends — saves to local storage
+export async function saveCallLog(entry) {
+  try {
+    const raw = await AsyncStorage.getItem('local_call_logs');
+    const logs = raw ? JSON.parse(raw) : [];
+    logs.unshift({ ...entry, timestamp: entry.timestamp || new Date().toISOString() });
+    // keep last 500 entries locally
+    await AsyncStorage.setItem('local_call_logs', JSON.stringify(logs.slice(0, 500)));
+  } catch {}
 }
 
 export async function syncCallLogs() {
   const lastSyncRaw = await AsyncStorage.getItem(LAST_SYNC_KEY);
   const lastSync = lastSyncRaw ? parseInt(lastSyncRaw, 10) : 0;
 
-  const newLogs = await readDeviceCallLogs(lastSync);
+  const newLogs = await readLocalCallLogs(lastSync);
   if (newLogs.length === 0) return { synced: 0, message: 'No new calls to sync' };
 
   const res = await api.post('/api/calls/sync', { calls: newLogs });
