@@ -20,6 +20,8 @@ const corsOptions = {
   origin: (origin, callback) => {
     // allow requests with no origin (mobile apps, curl, Postman)
     if (!origin) return callback(null, true);
+    // allow any localhost port in development
+    if (origin.match(/^http:\/\/localhost:\d+$/)) return callback(null, true);
     if (allowedOrigins.includes(origin)) return callback(null, true);
     callback(new Error(`CORS: origin ${origin} not allowed`));
   },
