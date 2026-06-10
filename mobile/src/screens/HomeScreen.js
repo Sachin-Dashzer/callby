@@ -33,10 +33,13 @@ export default function HomeScreen({ onLogout }) {
   const loadData = async () => {
     try {
       const userStr = await AsyncStorage.getItem('user');
-      if (userStr) setUser(JSON.parse(userStr));
+      const parsedUser = userStr ? JSON.parse(userStr) : null;
+      if (parsedUser) setUser(parsedUser);
 
       const [callsRes, leadsRes] = await Promise.all([
-        api.get(`/api/calls/employee/${JSON.parse(userStr || '{}')._id}`, { params: { limit: 20, page: 1 } }).catch(() => null),
+        parsedUser?._id
+          ? api.get(`/api/calls/employee/${parsedUser._id}`, { params: { limit: 20, page: 1 } }).catch(() => null)
+          : Promise.resolve(null),
         api.get('/api/leads/assigned').catch(() => null)
       ]);
 
@@ -50,7 +53,6 @@ export default function HomeScreen({ onLogout }) {
 
   useEffect(() => {
     loadData();
-    // auto sync every 5 minutes
     const interval = setInterval(() => handleSync(true), 5 * 60 * 1000);
     return () => clearInterval(interval);
   }, []);
@@ -91,7 +93,6 @@ export default function HomeScreen({ onLogout }) {
       contentContainerStyle={styles.content}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#e94560" />}
     >
-      {/* Header */}
       <View style={styles.header}>
         <View>
           <Text style={styles.greeting}>Hello, {user?.name?.split(' ')[0] || 'Employee'} 👋</Text>
@@ -102,14 +103,12 @@ export default function HomeScreen({ onLogout }) {
         </TouchableOpacity>
       </View>
 
-      {/* Stats */}
       <View style={styles.statsRow}>
         <StatBox label="Today's Calls" value={todayCalls.length} color="#e94560" />
         <StatBox label="Missed" value={todayMissed} color="#f59e0b" />
         <StatBox label="Outgoing" value={todayOutgoing} color="#3b82f6" />
       </View>
 
-      {/* Sync card */}
       <View style={styles.syncCard}>
         <View>
           <Text style={styles.syncTitle}>Sync Status</Text>
@@ -122,7 +121,6 @@ export default function HomeScreen({ onLogout }) {
         </TouchableOpacity>
       </View>
 
-      {/* Recent Calls */}
       <Text style={styles.sectionTitle}>Recent Calls</Text>
       {todayCalls.slice(0, 10).map((call) => (
         <View key={call._id} style={styles.callRow}>
@@ -137,11 +135,8 @@ export default function HomeScreen({ onLogout }) {
           </View>
         </View>
       ))}
-      {todayCalls.length === 0 && (
-        <Text style={styles.emptyText}>No calls today yet</Text>
-      )}
+      {todayCalls.length === 0 && <Text style={styles.emptyText}>No calls today yet</Text>}
 
-      {/* My Leads */}
       <Text style={[styles.sectionTitle, { marginTop: 24 }]}>My Leads</Text>
       {leads.map((lead) => (
         <View key={lead._id} style={styles.leadRow}>
@@ -149,14 +144,12 @@ export default function HomeScreen({ onLogout }) {
             <Text style={styles.leadName}>{lead.name}</Text>
             <Text style={styles.leadPhone}>{lead.phone}</Text>
           </View>
-          <View style={[styles.statusBadge, getStatusStyle(lead.status)]}>
-            <Text style={styles.statusText}>{lead.status.replace('_', ' ')}</Text>
+          <View style={[styles.statusBadge, getStatusStyle(lead.status || 'new')]}>
+            <Text style={styles.statusText}>{lead.status?.replace('_', ' ') || 'unknown'}</Text>
           </View>
         </View>
       ))}
-      {leads.length === 0 && (
-        <Text style={styles.emptyText}>No leads assigned</Text>
-      )}
+      {leads.length === 0 && <Text style={styles.emptyText}>No leads assigned</Text>}
     </ScrollView>
   );
 }

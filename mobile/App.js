@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, ActivityIndicator } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import LoginScreen from './src/screens/LoginScreen';
@@ -20,24 +21,32 @@ export default function App() {
 
   if (screen === null) {
     return (
-      <View style={{ flex: 1, backgroundColor: '#0f3460', justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size="large" color="#e94560" />
-      </View>
+      <SafeAreaProvider>
+        <View style={{ flex: 1, backgroundColor: '#0f3460', justifyContent: 'center', alignItems: 'center' }}>
+          <ActivityIndicator size="large" color="#e94560" />
+        </View>
+      </SafeAreaProvider>
     );
   }
 
   if (screen === 'login') {
-    return <LoginScreen onLogin={() => setScreen('main')} />;
+    return (
+      <SafeAreaProvider>
+        <LoginScreen onLogin={() => setScreen('main')} />
+      </SafeAreaProvider>
+    );
   }
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#0f3460' }}>
-      <View style={{ flex: 1 }}>
-        {tab === 'home' && <HomeScreen onLogout={() => setScreen('login')} />}
-        {tab === 'calls' && <CallsScreen />}
-        {tab === 'leads' && <LeadsScreen />}
+    <SafeAreaProvider>
+      <View style={{ flex: 1, backgroundColor: '#0f3460' }}>
+        <View style={{ flex: 1 }}>
+          {tab === 'home' && <HomeScreen onLogout={() => setScreen('login')} />}
+          {tab === 'calls' && <CallsScreen />}
+          {tab === 'leads' && <LeadsScreen />}
+        </View>
+        <TabBar active={tab} onChange={setTab} />
       </View>
-      <TabBar active={tab} onChange={setTab} />
-    </View>
+    </SafeAreaProvider>
   );
 }

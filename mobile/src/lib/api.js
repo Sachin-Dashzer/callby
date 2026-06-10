@@ -1,12 +1,8 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Constants from 'expo-constants';
 
-// Set your deployed backend URL in app.json extra.apiUrl
-// Falls back to localhost for local dev
-const API_URL =
-  Constants.expoConfig?.extra?.apiUrl ||
-  'http://localhost:5000';
+// Hardcoded for production — Constants.expoConfig is unreliable in EAS builds
+const API_URL = 'https://callby.vercel.app';
 
 const api = axios.create({ baseURL: API_URL, timeout: 15000 });
 
