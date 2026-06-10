@@ -6,6 +6,7 @@
     "sdkVersion": "52.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "dark",
+    "newArchEnabled": false,
     "splash": {
       "backgroundColor": "#1a1a2e"
     },

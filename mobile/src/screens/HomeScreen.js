@@ -22,7 +22,7 @@ function StatBox({ label, value, color = '#e94560' }) {
   );
 }
 
-export default function HomeScreen() {
+export default function HomeScreen({ onLogout }) {
   const [user, setUser] = useState(null);
   const [calls, setCalls] = useState([]);
   const [leads, setLeads] = useState([]);
@@ -97,7 +97,9 @@ export default function HomeScreen() {
           <Text style={styles.greeting}>Hello, {user?.name?.split(' ')[0] || 'Employee'} 👋</Text>
           <Text style={styles.subGreeting}>Here's your call summary</Text>
         </View>
-        <View style={[styles.syncDot, { backgroundColor: syncing ? '#f59e0b' : '#10b981' }]} />
+        <TouchableOpacity onPress={async () => { await AsyncStorage.multiRemove(['token','user']); onLogout?.(); }}>
+          <Text style={{ color: '#e94560', fontSize: 12 }}>Logout</Text>
+        </TouchableOpacity>
       </View>
 
       {/* Stats */}
