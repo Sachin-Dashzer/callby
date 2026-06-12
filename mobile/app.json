@@ -5,13 +5,20 @@
     "version": "1.0.0",
     "sdkVersion": "52.0.0",
     "orientation": "portrait",
-    "userInterfaceStyle": "dark",
+    "userInterfaceStyle": "light",
     "newArchEnabled": false,
+    "icon": "./assets/logo.png",
     "splash": {
-      "backgroundColor": "#1a1a2e"
+      "image": "./assets/logo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
     },
     "android": {
       "package": "com.calltrack.app",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/logo.png",
+        "backgroundColor": "#ffffff"
+      },
       "permissions": [
         "READ_CALL_LOG",
         "READ_CONTACTS"
@@ -21,11 +28,15 @@
       "supportsTablet": false,
       "bundleIdentifier": "com.calltrack.app"
     },
+    "plugins": [
+      "./app.plugin.js"
+    ],
     "extra": {
       "apiUrl": "https://callby.vercel.app",
       "eas": {
-        "projectId": "68f8375c-ebdb-4abc-ad8b-a241ef7d9f17"
+        "projectId": "a93d0d8d-f7fd-410d-9524-106eed59ac9f"
       }
-    }
+    },
+    "owner": "ryanclinic"
   }
 }
